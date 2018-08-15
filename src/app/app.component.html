@@ -1,1 +1,21 @@
-<router-outlet></router-outlet>
+<header>
+    <ul nz-menu [nzMode]="'horizontal'">
+        <li nz-menu-item>LOGO</li>
+
+        <li nz-menu-item *ngFor="let item of menus">
+            <a routerLink="{{item.url}}" target="_blank" rel="noopener noreferrer">
+                    {{item.name}}
+            </a>
+        </li>
+
+        <!-- <li nz-menu-item><i class="anticon anticon-mail"></i> 首页</li>
+        <li nz-menu-item><i class="anticon anticon-appstore"></i> 试题管理</li>
+        <li nz-submenu>
+            <span title><i class="anticon anticon-setting"></i> 试卷管理</span>
+        </li>
+        <li nz-menu-item><i class="anticon anticon-appstore"></i> 考试管理</li> -->
+    </ul>
+</header>
+<div style="margin-top: 30px">
+    <router-outlet></router-outlet>
+</div>

@@ -9,6 +9,8 @@ import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { AppRoutingModule } from './app-routing.module';
+import { ServicesModule } from 'src/app/core/service/services.module';
+import { CommonModule } from '@angular/common';
 
 registerLocaleData(zh);
 
@@ -21,10 +23,20 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    NgZorroAntdModule,
-    AppRoutingModule
+    // NgZorroAntdModule,
+    AppRoutingModule,
+    ServicesModule,
+    CommonModule,
+    NgZorroAntdModule.forRoot()
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN },
+    {
+      provide: 'BASE_CONFIG',
+      useValue: {
+          urm: 'http://localhost:8000',
+          server: '/api'
+      }
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
