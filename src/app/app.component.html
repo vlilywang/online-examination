@@ -3,7 +3,8 @@
         <li nz-menu-item>LOGO</li>
 
         <li nz-menu-item *ngFor="let item of menus">
-            <a routerLink="{{item.url}}" target="_blank" rel="noopener noreferrer">
+            <!-- <a routerLink="{{item.url}}" target="_blank" rel="noopener noreferrer"> -->
+            <a routerLink="{{item.url}}" rel="noopener noreferrer">
                     {{item.name}}
             </a>
         </li>

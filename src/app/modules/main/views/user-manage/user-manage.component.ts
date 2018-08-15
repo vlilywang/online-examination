@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../snippets/services/user.service';
 import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-manage',
@@ -29,8 +30,9 @@ export class UserManageComponent implements OnInit {
   isEditVisible = false;
   isDeleteVisible = false;
   confirmModal: NzModalRef;
-
+  addForm: FormGroup;
   constructor(
+    private fb: FormBuilder,
     private userService: UserService,
     private msg: NzMessageService,
     private modal: NzModalService
@@ -48,6 +50,13 @@ export class UserManageComponent implements OnInit {
         this.loading = false;
       }
     );
+    this.addForm = this.fb.group({
+      name: [null, [Validators.required]],
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      roleId: [null, [Validators.required]],
+      areaId: [null, [Validators.required]]
+    });
   }
 
   filterRoleChange(value: any): void {
@@ -82,7 +91,12 @@ export class UserManageComponent implements OnInit {
   }
 
   // 功能
-  addUser() {}
+  addUser() {
+    if (!this.addForm.value.username) {
+      this.msg.warning('登录名不能为空');
+      return;
+    }
+  }
   editUser() {}
   deleteUser() {
     this.userService.deleteUser(this.id).subscribe(
