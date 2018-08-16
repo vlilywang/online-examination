@@ -1,8 +1,32 @@
-<div>
-    <h5>test</h5>
-    <ul>
-        <li *ngFor="let item of users">
-            {{item.username}}
-        </li>
-    </ul>
-</div>
+<nz-table #nzTable [nzData]="grades" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead (nzSortChange)="sort($event)" nzSingleSort>
+        <tr>
+            <th nzShowFilter [nzFilters]="exampaperFilter" [nzFilterMultiple]="false" (nzFilterChange)="filterPaperChange($event)">
+                试卷
+            </th>
+            <th>考生姓名
+                <nz-dropdown nzTrigger="click" [nzClickHide]="false">
+                    <i class="anticon anticon-smile-o ant-table-filter-icon" nz-dropdown></i>
+                    <div class="custom-filter-dropdown">
+                        <input type="text" nz-input placeholder="Search name" [(ngModel)]="keyword">
+                        <button nz-button [nzType]="'primary'" (click)="search()">Search</button>
+                    </div>
+                </nz-dropdown>
+            </th>
+            <th nzShowSort nzSortKey="grade">成绩</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of nzTable.data">
+            <td>{{data.examPaper.title}}</td>
+            <td>{{data.user.name}}</td>
+            <td>{{data.grade}}</td>
+        </tr>
+    </tbody>
+    <div nz-row class="pull-right">
+        <nz-pagination [nzPageIndex]="page" [nzPageSize]="pageSize" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="pageIndexChange($event)" nzShowQuickJumper [nzTotal]="totalAmount" *ngIf="grades.length > 0 && !loading"></nz-pagination>
+        <ng-template #totalTemplate let-total>
+            总计 {{totalAmount}} 条
+        </ng-template>
+    </div>
+</nz-table>

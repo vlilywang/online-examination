@@ -8,8 +8,9 @@ import { UserManageComponent } from './views/user-manage/user-manage.component';
 import { QuestionManageComponent } from './views/question-manage/question-manage.component';
 import { ExampaperManageComponent } from './views/exampaper-manage/exampaper-manage.component';
 // import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { ExamComponent } from './views/exam/exam.component';
 
 const COMPONENT_NOROUNT = [];
 
@@ -19,7 +20,8 @@ const COMPONENT_NOROUNT = [];
     ServicesModule,
     CommonModule,
     NgZorroAntdModule.forRoot(),
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
     // BrowserModule
   ],
   declarations: [
@@ -28,7 +30,8 @@ const COMPONENT_NOROUNT = [];
       HomeComponent,
       UserManageComponent,
       QuestionManageComponent,
-      ExampaperManageComponent
+      ExampaperManageComponent,
+      ExamComponent
   ]
 })
 export class MainModule { }

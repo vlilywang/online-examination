@@ -12,7 +12,8 @@ export class UserManageComponent implements OnInit {
 
   users = [];
   page: number;
-  pageSize = 20;
+  pageSize = 10;
+  totalAmount: number;
   loading = true; // bug
   beginTime: any;
   endTime: any;
@@ -31,6 +32,7 @@ export class UserManageComponent implements OnInit {
   isDeleteVisible = false;
   confirmModal: NzModalRef;
   addForm: FormGroup;
+  editForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -48,6 +50,7 @@ export class UserManageComponent implements OnInit {
       val => {
         this.users = val.data.content;
         this.loading = false;
+        this.totalAmount = val.dataCount;
       }
     );
     this.addForm = this.fb.group({
@@ -55,13 +58,20 @@ export class UserManageComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
       roleId: [null, [Validators.required]],
-      areaId: [null, [Validators.required]]
+    });
+    this.editForm = this.fb.group({
+      name: [null, [Validators.required]],
+      roleId: [null, [Validators.required]]
     });
   }
 
   filterRoleChange(value: any): void {
-    console.log('value:' + value);
     this.searchRole = value;
+    this.search();
+  }
+
+  pageIndexChange(event: any) {
+    this.page = event;
     this.search();
   }
 
@@ -96,8 +106,40 @@ export class UserManageComponent implements OnInit {
       this.msg.warning('登录名不能为空');
       return;
     }
+    if (!this.addForm.value.name) {
+      this.msg.warning('姓名不能为空');
+      return;
+    }
+    if (!this.addForm.value.roleId) {
+      this.msg.warning('请选择角色');
+      return;
+    }
+    this.userService.addUser(this.addForm.value.username, this.addForm.value.name, this.addForm.value.roleId)
+    .subscribe(val => {
+      this.msg.success('增加成功');
+      this.isAddVisible = false;
+      this.refresh();
+    }, (error) => {
+      this.msg.error('增加失败');
+    });
   }
-  editUser() {}
+  editUser() {
+    if (!this.editForm.value.name) {
+      this.msg.warning('姓名不能为空');
+      return;
+    }
+    if (!this.editForm.value.roleId) {
+      this.msg.warning('请选择角色');
+      return;
+    }
+    this.userService.editUser(this.id, this.editForm.value.name, this.editForm.value.roleId).subscribe(val => {
+      this.msg.success('修改成功');
+      this.isEditVisible = false;
+      this.refresh();
+    }, (error) => {
+      this.msg.error('修改失败');
+    });
+  }
   deleteUser() {
     this.userService.deleteUser(this.id).subscribe(
       val => {
@@ -114,8 +156,26 @@ export class UserManageComponent implements OnInit {
   showAddModal() {
     this.isAddVisible = true;
   }
-  showEditModal() {
+  showEditModal(data) {
+    this.id = data.id;
     this.isEditVisible = true;
+
+    this.editForm.setValue({
+      name: data.name || null,
+      username: data.username || null,
+      roleId: data.role.id || null,
+    });
+
+    /***
+     *  const area1 = user.area || {};
+    const name1 = user.name || '';
+    const role1 = user.role || {};
+    this.editForm.setValue({
+      name: name1,
+      areaId: area1.id ? area1.id + '' : null,
+      roleId: role1.id ? role1.id + '' : null,
+    });
+     */
   }
   showDeleteModal(id: number) {
     this.isDeleteVisible = true;
