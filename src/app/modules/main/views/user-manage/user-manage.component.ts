@@ -57,7 +57,7 @@ export class UserManageComponent implements OnInit {
       name: [null, [Validators.required]],
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
-      roleId: [null, [Validators.required]],
+      roleId: [null, [Validators.required]]
     });
     this.editForm = this.fb.group({
       name: [null, [Validators.required]],
