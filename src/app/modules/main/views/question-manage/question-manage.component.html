@@ -1,3 +1,141 @@
-<p>
-  question-manage works!
-</p>
+<div nz-row>
+    <div nz-col nzSpan="8">
+        <nz-input-group nzSearch [nzSuffix]="suffixIconButton">
+            <input type="text" nz-input placeholder="请输入搜索关键词" [(ngModel)]="keyword">
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="search()"><i class="anticon anticon-search"></i></button>
+        </ng-template>
+        <br>
+        <br>
+    </div>
+</div>
+
+<div nz-row>
+    <button nz-button nzType="primary" class="pull-right" (click)="showAddModal()">
+    <i class="anticon anticon-user-add"></i>新增试题</button>
+</div>
+
+<nz-table #nzTable [nzData]="questions" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th>
+                题干
+            </th>
+            <th nzShowFilter [nzFilters]="typeFilter" [nzFilterMultiple]="false" (nzFilterChange)="filterTypeChange($event)">题目类型</th>
+            <th>选项</th>
+            <th>答案</th>
+            <th>创建时间</th>
+            <th>分值</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of nzTable.data">
+            <td>{{data.title}}</td>
+            <td>{{data.type.typeName}}</td>
+            <td>
+                <span *ngFor="let item of data.options" style="padding-right: 3px">{{item.singnal}}. {{item.options}}</span>
+            </td>
+            <td>{{data.answer}}</td>
+            <td>{{data.createTime}}</td>
+            <td>{{data.perValue}}</td>
+            <td>
+                <i class="anticon anticon-edit" style="margin-right: 5px" (click)="showEditModal(data)"></i>
+                <i class="anticon anticon-delete" (click)="showDeleteModal(data.id)"></i>
+            </td>
+        </tr>
+    </tbody>
+    <div nz-row class="pull-right">
+        <nz-pagination [nzPageIndex]="page" [nzPageSize]="pageSize" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="pageIndexChange($event)" nzShowQuickJumper [nzTotal]="totalAmount" *ngIf="questions.length > 0 && !loading"></nz-pagination>
+        <ng-template #totalTemplate let-total>
+            总计 {{totalAmount}} 条
+        </ng-template>
+    </div>
+</nz-table>
+
+<nz-modal [(nzVisible)]="isAddVisible" nzTitle="新增试题" (nzOnCancel)="handleCancel()" (nzOnOk)="addQuestion()">
+    <form nz-form [formGroup]="addForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title" nzRequired>
+                <span>题干</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="title" formControlName="title">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="keyword" nzRequired>
+                <span>关键词</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="keyword" formControlName="keyword">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="typeId" nzRequired>
+                <span>试题类型</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="typeId" formControlName="typeId">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="option" nzRequired>
+                <span>选项</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="option" formControlName="option">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answer" nzRequired>
+                <span>答案</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="answer" formControlName="answer">
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isEditVisible" nzTitle="编辑用户" (nzOnCancel)="handleCancel()" (nzOnOk)="editQuestion()">
+    <form nz-form [formGroup]="editForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="title" nzRequired>
+                <span>题干</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="title" formControlName="title">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="keyword" nzRequired>
+                <span>关键词</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="keyword" formControlName="keyword">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="option" nzRequired>
+                <span>选项</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="option" formControlName="option">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answer" nzRequired>
+                <span>答案</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="answer" formControlName="answer">
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isDeleteVisible" nzTitle="确认删除" nzOkText="确认" nzCancelText="取消" (nzOnOk)="deleteQuestion()" (nzOnCancel)="handleCancel()">
+    <p>确定要删除该试题吗</p>
+</nz-modal>

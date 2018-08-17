@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExampaperService } from '../../snippets/services/exampaper.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-exampaper-manage',
@@ -25,13 +26,14 @@ export class ExampaperManageComponent implements OnInit {
   constructor(
     private exampaperService: ExampaperService,
     private fb: FormBuilder,
-    private msg: NzMessageService
+    private msg: NzMessageService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.page = 1;
     this.exampaperService.getExampapers(this.page, this.pageSize).subscribe(val => {
-      this.exampapers = val.data.content;
+      this.exampapers = val.data;
       this.totalAmount = val.dataCount;
     });
     this.addForm = this.fb.group({
@@ -70,7 +72,41 @@ export class ExampaperManageComponent implements OnInit {
       this.isAddVisible = false;
       // this.refresh();
     }, (error) => {
-        this.msg.error('试卷生成失败');
+      this.msg.error('试卷生成失败');
     });
+  }
+
+  deleteExampaper(exampaper: any) {
+    this.exampaperService.deleteExampaper(exampaper.id).subscribe(val => {
+      this.msg.success('删除成功');
+      this.isDeleteVisible = false;
+      // this.refresh();
+    }, (error) => {
+      this.msg.error('删除失败');
+    });
+
+  }
+  // 对话框
+  showAddModal() {
+    this.isAddVisible = true;
+  }
+  showDeleteModal() {
+    this.isDeleteVisible = true;
+  }
+  // 对话框通用
+  handleOk(): void {
+    this.isAddVisible = false;
+    this.isDeleteVisible = false;
+  }
+
+  handleCancel(): void {
+    this.isAddVisible = false;
+    this.isDeleteVisible = false;
+  }
+  gotoDetail(id: number) {
+    this.router.navigateByUrl(`/app/exampaper-detail/${id}`);
+  }
+  gotoGradDetail(id: number) {
+    this.router.navigateByUrl(`/app/exam-detail/${id}`);
   }
 }

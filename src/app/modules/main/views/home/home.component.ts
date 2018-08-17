@@ -11,13 +11,17 @@ import { ExampaperService } from '../../snippets/services/exampaper.service';
 export class HomeComponent implements OnInit {
 
   grades = [];
-  searchExampaper = '';
+  // searchExampaper = '';
   keyword = '';
   exampaperFilter = [];
   page: number;
   pageSize = 10;
   totalAmount: number;
   filter: any;
+  beginTime = '';
+  endTime = '';
+  exampaperId: any;
+  userId: number;
   constructor(
     private gradeService: GradeService,
     private exampaperService: ExampaperService
@@ -25,17 +29,20 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.exampaperService.getExampapers(1, 20).subscribe(
+    this.page = 1;
+    this.exampaperId = null;
+    this.userId = null;
+    this.exampaperService.getExampapers(this.page, this.pageSize).subscribe(
       val => {
-        this.filter = val.data.content;
+        this.filter = val.data;
         for (let i = 0; i < this.filter.length; i++) {
           this.exampaperFilter[i] = { text: this.filter[i].title, value: this.filter[i].id };
         }
       }
     );
-    this.gradeService.getGrades(1, 20, 1, 9).subscribe(
+    this.gradeService.getGrades(this.page, this.pageSize).subscribe(
       val => {
-        this.grades = val.data.content;
+        this.grades = val.data;
         this.totalAmount = val.dataCount;
       }
     );
@@ -43,30 +50,33 @@ export class HomeComponent implements OnInit {
 
   // 通过试卷筛选
   filterPaperChange(value: any): void {
-    this.searchExampaper = value;
+    this.exampaperId = value;
     this.search();
   }
   pageIndexChange(event: any): void {
     this.page = event;
     this.search();
   }
-  // tslint:disable-next-line:member-ordering
-  // sortMap = {
-  //   grade: null
-  // };
-  // tslint:disable-next-line:member-ordering
-  // sortName = null;
-  // tslint:disable-next-line:member-ordering
-  // sortValue = null;
-  // sort(sortName: string, value: string): void {
-  //   console.log(sortName);
-  //   // this.sortName = sortName;
-  //   // this.sortValue = value;
-  //   // this.search();
-  // }
-  search(): void {
-
+  refresh() {
+    this.page = 1;
+    this.exampaperId = null;
+    this.userId = null;
+    this.beginTime = '';
+    this.endTime = '';
+    this.gradeService.getGrades(this.page, this.pageSize).subscribe(
+      val => {
+        this.grades = val.data;
+        this.totalAmount = val.dataCount;
+      }
+    );
   }
-  // 删除
-  // 筛选 search
+  search(): void {
+    this.gradeService.getGrades(this.page, this.pageSize, this.userId, this.exampaperId, this.beginTime, this.endTime).subscribe(
+      val => {
+        this.grades = val.data;
+        this.totalAmount = val.dataCount;
+      }
+    );
+  }
+
 }

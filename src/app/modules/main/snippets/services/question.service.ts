@@ -12,7 +12,7 @@ export class QuestionService {
         private http: HttpClient
     ) {}
     getQuestions(page: any, pageSize: any, typeId?: any, beginTime?: any, endTime?: any, keyword?: any): Observable<any> {
-        const url = `/api/user`;
+        const url = `/api/question`;
         return this.http.get(url, {
             params: {
                 page: page || 1,

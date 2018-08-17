@@ -10,7 +10,9 @@ import { ExampaperManageComponent } from './views/exampaper-manage/exampaper-man
 // import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { ExamComponent } from './views/exam/exam.component';
+import { ExamComponent } from './views/take-exam/exam.component';
+import { ExampaperComponent } from './views/exampaper-list/exampaper.component';
+import { ExampaperDetailComponent } from './views/exampaper-detail/exampaper-detail.component';
 
 const COMPONENT_NOROUNT = [];
 
@@ -31,7 +33,9 @@ const COMPONENT_NOROUNT = [];
       UserManageComponent,
       QuestionManageComponent,
       ExampaperManageComponent,
-      ExamComponent
+      ExamComponent,
+      ExampaperComponent,
+      ExampaperDetailComponent
   ]
 })
 export class MainModule { }

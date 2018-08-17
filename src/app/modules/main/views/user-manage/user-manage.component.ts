@@ -48,7 +48,7 @@ export class UserManageComponent implements OnInit {
     this.keyword = '';
     this.userService.getUsers(this.page, this.pageSize).subscribe(
       val => {
-        this.users = val.data.content;
+        this.users = val.data;
         this.loading = false;
         this.totalAmount = val.dataCount;
       }
@@ -79,7 +79,8 @@ export class UserManageComponent implements OnInit {
     this.loading = true;
     this.userService.getUsers(this.page, this.pageSize, this.searchRole, this.beginTime, this.endTime, this.keyword)
       .subscribe(val => {
-        this.users = val.data.content;
+        this.users = val.data;
+        this.totalAmount = val.dataCount;
         this.loading = false;
       });
   }
@@ -94,7 +95,8 @@ export class UserManageComponent implements OnInit {
     this.id = null;
     this.userService.getUsers(this.page, this.pageSize).subscribe(
       val => {
-        this.users = val.data.content;
+        this.users = val.data;
+        this.totalAmount = val.dataCount;
         this.loading = false;
       }
     );

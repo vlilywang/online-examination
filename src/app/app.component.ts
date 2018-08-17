@@ -11,7 +11,8 @@ export class AppComponent {
     { name: '首页', url: '/app/home' },
     { name: '试题管理', url: '/app/question' },
     { name: '试卷管理', url: '/app/exampaper' },
-    { name: '考试管理', url: '/app/grade' },
-    { name: '用户管理', url: '/app/user' }
+    // { name: '考试管理', url: '/app/grade' },
+    { name: '用户管理', url: '/app/user' },
+    { name: '试卷列表', url: '/app/stu-exam'}
   ];
 }
