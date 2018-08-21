@@ -1,10 +1,6 @@
 <nz-list [nzDataSource]="exampapers" [nzItemLayout]="'vertical'" [nzRenderItem]="item" [nzPagination]="pagination">
     <ng-template #item let-item>
         <nz-list-item [nzContent]="item.content" [nzActions]="[starAction,likeAction,msgAction]" [nzExtra]="extra">
-            <!-- <ng-template #starAction><i class="anticon anticon-check-circle-o" style="margin-right: 8px"></i>{{item.singleAmount}}</ng-template>
-            <ng-template #likeAction><i class="anticon anticon-check-square-o" style="margin-right: 8px;"></i> {{item.multiAmount}}</ng-template>
-            <ng-template #msgAction><i class="anticon anticon-close-circle-o" style="margin-right: 8px;"></i> {{item.judgeAmount}}</ng-template>
-      -->
             <ng-template #starAction>单选题： {{item.singleAmount}}</ng-template>
             <ng-template #likeAction>多选题： {{item.multiAmount}}</ng-template>
             <ng-template #msgAction>判断题： {{item.judgeAmount}}</ng-template>
@@ -13,7 +9,6 @@
             </nz-list-item-meta>
             <ng-template #extra>
                 <button nz-button nzType="primary" (click)="takeExam(item.id)">进入考试</button>
-                <!-- <img width="272" alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"> -->
             </ng-template>
         </nz-list-item>
     </ng-template>
