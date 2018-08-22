@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 import { UserService } from '../../snippets/services/user.service';
 import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './user-manage.component.html',
   styleUrls: ['./user-manage.component.less']
 })
-export class UserManageComponent implements OnInit {
+export class UserManageComponent implements OnInit, AfterViewInit {
 
   users = [];
   page: number;
@@ -39,9 +39,13 @@ export class UserManageComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private msg: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private elementRef: ElementRef,
   ) { }
-
+  ngAfterViewInit(): void {
+    // const divele = this.elementRef.nativeElement.querySelector('div');
+    // console.log(divele);
+  }
   ngOnInit() {
     this.page = 1;
     this.searchRole = '';
