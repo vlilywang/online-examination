@@ -8,6 +8,8 @@
         <tr>
             <th>
                 登录名
+            </th>
+            <th>姓名
                 <nz-dropdown nzTrigger="click" [nzClickHide]="false">
                     <i class="anticon anticon-smile-o ant-table-filter-icon" nz-dropdown></i>
                     <div class="custom-filter-dropdown">
@@ -16,7 +18,6 @@
                     </div>
                 </nz-dropdown>
             </th>
-            <th>姓名</th>
             <th nzShowFilter [nzFilters]="roleFilter" [nzFilterMultiple]="false" (nzFilterChange)="filterRoleChange($event)">角色</th>
             <th>操作</th>
         </tr>
@@ -28,6 +29,7 @@
             <td>{{data.role.name}}</td>
             <td>
                 <i class="anticon anticon-edit" style="margin-right: 5px" (click)="showEditModal(data)"></i>
+                <i class="anticon anticon-key" (click)="showEditPasswordModal(data.id)"></i>
                 <i class="anticon anticon-delete" (click)="showDeleteModal(data.id)"></i>
             </td>
         </tr>
@@ -85,6 +87,19 @@
             </nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <input nz-input id="roleId" formControlName="roleId">
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isEditPasswordVisible" nzTitle="修改用户密码" (nzOnCancel)="handleCancel()" (nzOnOk)="editUserPassword()">
+    <form nz-form [formGroup]="passwordForm">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>
+                <span>新密码</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input nz-input id="password" formControlName="password">
             </nz-form-control>
         </nz-form-item>
     </form>

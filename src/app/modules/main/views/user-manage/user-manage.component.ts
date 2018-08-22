@@ -30,9 +30,11 @@ export class UserManageComponent implements OnInit {
   isAddVisible = false;
   isEditVisible = false;
   isDeleteVisible = false;
+  isEditPasswordVisible = false;
   confirmModal: NzModalRef;
   addForm: FormGroup;
   editForm: FormGroup;
+  passwordForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -62,6 +64,9 @@ export class UserManageComponent implements OnInit {
     this.editForm = this.fb.group({
       name: [null, [Validators.required]],
       roleId: [null, [Validators.required]]
+    });
+    this.passwordForm = this.fb.group({
+      password: [null, [Validators.required]]
     });
   }
 
@@ -142,6 +147,19 @@ export class UserManageComponent implements OnInit {
       this.msg.error('修改失败');
     });
   }
+  editUserPassword() {
+    if (!this.passwordForm.value.password) {
+      this.msg.error('新密码不能为空');
+      return;
+    }
+    this.userService.editUserPassword(this.id, this.passwordForm.value.password).subscribe(val => {
+      this.msg.success('修改成功');
+      this.isEditPasswordVisible = false;
+      this.refresh();
+    }, (error) => {
+      this.msg.error('修改失败');
+    });
+  }
   deleteUser() {
     this.userService.deleteUser(this.id).subscribe(
       val => {
@@ -158,6 +176,10 @@ export class UserManageComponent implements OnInit {
   showAddModal() {
     this.isAddVisible = true;
   }
+  showEditPasswordModal(id: number) {
+    this.id = id;
+    this.isEditPasswordVisible = true;
+  }
   showEditModal(data) {
     this.id = data.id;
     this.isEditVisible = true;
@@ -167,17 +189,6 @@ export class UserManageComponent implements OnInit {
       username: data.username || null,
       roleId: data.role.id || null,
     });
-
-    /***
-     *  const area1 = user.area || {};
-    const name1 = user.name || '';
-    const role1 = user.role || {};
-    this.editForm.setValue({
-      name: name1,
-      areaId: area1.id ? area1.id + '' : null,
-      roleId: role1.id ? role1.id + '' : null,
-    });
-     */
   }
   showDeleteModal(id: number) {
     this.isDeleteVisible = true;
@@ -188,11 +199,13 @@ export class UserManageComponent implements OnInit {
     this.isEditVisible = false;
     this.isAddVisible = false;
     this.isDeleteVisible = false;
+    this.isEditPasswordVisible = false;
   }
 
   handleCancel(): void {
     this.isEditVisible = false;
     this.isAddVisible = false;
+    this.isEditPasswordVisible = false;
     this.isDeleteVisible = false;
   }
 
